@@ -1,0 +1,7 @@
+{
+    "server_ip": "127.0.0.1",
+    "port": 1881,
+    "client_id": "client_001",
+    "client_pass": "client_secret",
+    "jwt_token": "valid_client_jwt_token"
+}

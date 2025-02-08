@@ -1,0 +1,10 @@
+{
+    "port": 1881,
+    "min_virtual_ram_gb": 8,
+    "jwt_secret": "server_secret_key",
+    "max_clients": 100,
+    "enable_tls": true,
+    "tls_cert_file": "config/server.crt",
+    "tls_key_file": "config/server.key",
+    "log_level": "DEBUG"
+}
