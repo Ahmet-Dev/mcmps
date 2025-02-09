@@ -2,9 +2,10 @@
 #include <cassert>
 #include "security.h"
 
-int main() {
+int main()
+{
     std::cout << "[TEST SECURITY] Başlatılıyor..." << std::endl;
-    ISecurityManager* secManager = createSecurityManager();
+    ISecurityManager *secManager = createSecurityManager();
     secManager->initialize();
     assert(secManager->validatePacket("Test data"));
     assert(!secManager->validatePacket(""));

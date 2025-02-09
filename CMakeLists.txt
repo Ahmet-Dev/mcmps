@@ -52,6 +52,4 @@ target_link_libraries(test_security OpenSSL::SSL OpenSSL::Crypto Boost::system B
 # Include directories
 target_include_directories(server PRIVATE ${CMAKE_SOURCE_DIR})
 target_include_directories(client PRIVATE ${CMAKE_SOURCE_DIR})
-target_include_directories(test_server PRIVATE ${CMAKE_SOURCE_DIR})
-target_include_directories(test_client PRIVATE ${CMAKE_SOURCE_DIR})
-target_include_directories(test_security PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR})

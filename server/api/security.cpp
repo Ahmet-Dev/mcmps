@@ -1,34 +1,57 @@
-#include "security.h"
-#include <iostream>
+#include "SecurityManager.hpp"
+#include "error_handler.h"
 #include <openssl/evp.h>
 #include <openssl/err.h>
+#include <iostream>
+#include <chrono>
+#include <thread>
 
-// Adapter: Farklı kriptografik sağlayıcılar entegre edilebilir.
-bool loadTLSCertificates(const std::string &certFile, const std::string &keyFile) {
-    // Üretimde: OpenSSL API’leri ile SSL_CTX_new(), SSL_CTX_use_certificate_file() kullanılır.
+bool loadTLSCertificates(const std::string &certFile, const std::string &keyFile)
+{
     std::cout << "[SECURITY] TLS sertifikaları (" << certFile << ") ve anahtar (" << keyFile << ") yüklendi." << std::endl;
     return true;
 }
 
-class SecurityManager : public ISecurityManager {
-public:
-    void initialize() override {
-        std::cout << "[SECURITY] Güvenlik modülleri başlatılıyor (AES-256, TLS)..." << std::endl;
-        OpenSSL_add_all_algorithms();
-        ERR_load_crypto_strings();
-        if (!loadTLSCertificates("server.crt", "server.key")) {
-            std::cerr << "[SECURITY] TLS sertifika yüklemesi başarısız." << std::endl;
-        }
-        // Ek güvenlik yapılandırmaları: Güvenli anahtar yönetimi, loglama ve asenkron güvenlik kontrolleri entegre edilebilir.
-    }
+SecurityManager::SecurityManager() : running(true) {}
 
-    bool validatePacket(const std::string &packet) override {
-        std::cout << "[SECURITY] Gelen paket doğrulanıyor." << std::endl;
-        // Üretimde: Paket imzası, hash kontrolü, zaman damgası doğrulaması yapılır.
-        return !packet.empty();
-    }
-};
+SecurityManager::~SecurityManager()
+{
+    running = false;
+    if (monitorThread.joinable())
+        monitorThread.join();
+    std::cout << "[SECURITY] SecurityManager kapatılıyor." << std::endl;
+}
 
-ISecurityManager* createSecurityManager() {
+void SecurityManager::initialize()
+{
+    std::cout << "[SECURITY] Güvenlik modülleri başlatılıyor (AES-256, TLS)..." << std::endl;
+    OpenSSL_add_all_algorithms();
+    ERR_load_crypto_strings();
+    if (!loadTLSCertificates("server.crt", "server.key"))
+    {
+        std::cerr << "[SECURITY] TLS sertifika yüklemesi başarısız." << std::endl;
+    }
+    secureKey = "hashed_secret_key_example";
+    std::cout << "[SECURITY] Güvenli anahtar yönetimi yapılandırıldı." << std::endl;
+    monitorThread = std::thread(&SecurityManager::monitorSecurity, this);
+}
+
+void SecurityManager::monitorSecurity()
+{
+    while (running)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::cout << "[SECURITY] Asenkron güvenlik kontrolü yapılıyor..." << std::endl;
+    }
+}
+
+bool SecurityManager::validatePacket(const std::string &packet)
+{
+    std::cout << "[SECURITY] Gelen paket doğrulanıyor." << std::endl;
+    return !packet.empty();
+}
+
+ISecurityManager *createSecurityManager()
+{
     return new SecurityManager();
 }

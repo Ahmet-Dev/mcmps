@@ -1,5 +1,90 @@
 # Machine Code Multi Processing System
 
+This project presents the basic framework of a system that sends programs from the server to clients as machine code and performs distributed computations using the CPU and GPU power of the clients.
+
+## Features
+- Work distribution with Round Robin, Work Stealing, Performance-Based Allocation algorithms.
+- Virtual CPU, RAM (min. 8GB) and GPU resource management.
+- Secure communication with TLS encryption over TCP/IP and WebSockets.
+- Use of JWT for client authentication.
+- Performance monitoring and error logging mechanisms.
+
+## Technologies Used
+- **Languages:** C, C++, Assembly
+- **Networking:** TCP/IP, WebSockets
+- **Encryption:** AES-256, SHA-256, TLS 1.3
+- **Parallel Processing:** OpenMP, SIMD, TBB
+- **GPU Acceleration:** CUDA, OpenCL, Vulkan
+
+# Machine Code Multi Processing System Architecture
+
+The system consists of the following five layers:
+
+1. **Client Layer:** Clients run machine codes coming from the server on the CPU/GPU.
+2. **Communication Layer:** Secure data transfer is provided over TCP/IP and WebSockets.
+3. **Workload Management Layer:** Round Robin, Work Stealing and Performance-Based Allocation algorithms are used.
+4. **Virtualized Resource Layer:** Virtual CPU, RAM (min. 8GB) and GPU drivers are managed.
+
+5. **Security and Monitoring Layer:** TLS, AES-256, JWT verification, error logging and performance monitoring are performed.
+
+# Installation Guide
+
+## Requirements
+- A C++ compiler with C++17 support
+- CMake 3.10 or later
+- OpenSSL libraries
+
+## Build Steps
+1. Create a `build` folder in the project directory:
+`mkdir build && cd build`
+2. Configure with CMake:
+`cmake ..`
+3. Build the project:
+`make`
+
+## Operation
+- To start the server: `./server`
+- To start the client: `./client`
+
+# API Descriptions
+
+## Authentication
+- `bool verifyJWT(const std::string &token);`
+Verifies the JWT token on the server side.
+
+- `bool clientAuthenticate(const std::string &jwtToken);`
+Authenticates the client with the JWT token.
+
+## Workload Distribution
+- `void distributeTasksRoundRobin();`
+
+- `void distributeTasksWorkStealing();`
+
+- `void distributeTasksPerformanceBased();`
+
+## Virtual Resources
+- `void initializeVirtualCPU();`
+
+- `void initializeVirtualRAM();`
+
+- `void initializeVirtualGPU();`
+
+# Security Policies
+
+## Data Encryption
+- AES-256 is used for data encryption.
+- SHA-256 hash algorithm is applied for data integrity.
+
+## Communication Security
+- Secure data transfer is provided with TLS 1.3.
+- TCP/IP and WebSocket connections are encrypted over TLS.
+
+## Authentication
+- Clients are verified with JWT tokens.
+- Client connection is disconnected if there is no action for 5 minutes.
+
+# Türkçe
+
 Bu proje, sunucudaki programları makine kodu olarak istemcilere gönderip, istemcilerin CPU ve GPU gücünü kullanarak dağıtık hesaplamalar yapan bir sistemin temel iskeletini sunar.
 
 ## Özellikler

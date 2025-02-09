@@ -1,34 +1,22 @@
 #include "distribute.h"
+#include "core/task_manager.h" // Task Manager fonksiyonlarını kullanacağız.
 #include <iostream>
-#include <mutex>
 #include <thread>
+#include <chrono>
 
-static std::mutex coutMutex;
+namespace core
+{
 
-void RoundRobinDistributor::distribute(const std::vector<Task>& tasks) {
-    std::lock_guard<std::mutex> lock(coutMutex);
-    std::cout << "[DISTRIBUTE] Round Robin yöntemiyle dağıtım yapılıyor." << std::endl;
-    int clientIndex = 0;
-    for (const auto &task : tasks) {
-        // Üretim ortamında: Makine kodu paketleri şifrelenip, imzalandıktan sonra asenkron olarak gönderilir.
-        std::cout << "Görev " << task.id << " istemci " << clientIndex 
-                  << "'a gönderiliyor. Kod: " << task.machineCode << std::endl;
-        clientIndex = (clientIndex + 1) % 10;
+    void distributeTask(const std::string &task)
+    {
+        // Task Manager aracılığıyla görevi kuyruğa ekliyoruz.
+        submitTask([task]()
+                   {
+        std::cout << "[DISTRIBUTE] Görev işleniyor: " << task << std::endl;
+        // Gerçek iş yükü burada gerçekleştirilebilir.
+        // Örneğin, görev işlenirken simülasyon amaçlı kısa bir gecikme ekliyoruz.
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        std::cout << "[DISTRIBUTE] Görev tamamlandı: " << task << std::endl; });
     }
-}
 
-void WorkStealingDistributor::distribute(const std::vector<Task>& tasks) {
-    std::lock_guard<std::mutex> lock(coutMutex);
-    std::cout << "[DISTRIBUTE] Work Stealing yöntemiyle dağıtım yapılıyor." << std::endl;
-    for (const auto &task : tasks) {
-        std::cout << "Görev " << task.id << " yerel kuyruğa ekleniyor; gerekirse diğer istemciden çalınacak." << std::endl;
-    }
-}
-
-void PerformanceBasedDistributor::distribute(const std::vector<Task>& tasks) {
-    std::lock_guard<std::mutex> lock(coutMutex);
-    std::cout << "[DISTRIBUTE] Performance-Based Allocation yöntemiyle dağıtım yapılıyor." << std::endl;
-    for (const auto &task : tasks) {
-        std::cout << "Görev " << task.id << " performans ölçümüne göre seçilen gruba gönderiliyor." << std::endl;
-    }
-}
+} // namespace core

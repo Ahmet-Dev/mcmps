@@ -3,8 +3,8 @@
 
 #include <functional>
 
-namespace core {
-    // Asenkron görev yöneticisi; üretimde Boost.Asio veya libuv tabanlı asenkron I/O ile genişletilebilir.
+namespace core
+{
     void startTaskManager(size_t numThreads);
     void stopTaskManager();
     void submitTask(const std::function<void()> &task);
